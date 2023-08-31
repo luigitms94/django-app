@@ -1,0 +1,9 @@
+{
+  "name": "lexpage",
+  "version": "4.3.0",
+  "devDependencies": {
+    "grunt": "~1.0.1",
+    "grunt-contrib-compass": "~1.1.1",
+    "nunjucks": "~3.0.0"
+  }
+}
