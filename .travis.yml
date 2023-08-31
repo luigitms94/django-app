@@ -1,0 +1,40 @@
+os: linux
+dist: bionic
+language: python
+python:
+- 3.6
+addons:
+  postgresql: "9.6"
+  firefox: "latest"
+services:
+- redis
+- xvfb
+env:
+  global:
+  - DJANGO_SETTINGS_MODULE=settings_travis
+  - RUN_NPM_TESTS="yes"
+  jobs:
+  # - SELENIUM_WEBDRIVER=selenium.webdriver.chrome.webdriver.WebDriver
+  - SELENIUM_WEBDRIVER=selenium.webdriver.firefox.webdriver.WebDriver
+before_install:
+- wget https://chromedriver.storage.googleapis.com/2.27/chromedriver_linux64.zip
+- unzip chromedriver_linux64.zip
+- sudo mv chromedriver /usr/bin
+- wget https://github.com/mozilla/geckodriver/releases/download/v0.23.0/geckodriver-v0.23.0-linux64.tar.gz
+- tar xzvf geckodriver-v0.23.0-linux64.tar.gz
+- sudo mv geckodriver /usr/bin/
+- travis_retry npm install grunt-cli -g
+- sudo apt-get update # For compass, see #141
+- sudo apt-get install -y ruby-dev
+install:
+- pip install -r requirements_dev.txt # Testing libs
+- pip install -r requirements_prod.txt # Postgresql
+- travis_retry npm install
+- travis_retry bundle install
+before_script:
+- psql -c 'create database appdb;' -U postgres
+script:
+- coverage run    --source app/ --omit */migrations/* --omit */management/* app/manage.py collectstatic --noinput
+- coverage run -a --source app/ --omit */migrations/* --omit */management/* app/manage.py test -v 3
+after_success:
+- coveralls
