@@ -1,0 +1,40 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+# Django stuff:
+*.log
+
+# Lexpage-specific
+app/db
+app/settings_prod.py
+
+# Bower
+bower_components
+
+# Sass cache
+*.sass-cache
+
+# Misc
+Gemfile.lock
+.bundle
+
+# node modules
+node_modules/*
+
+# IDE
+.idea
+.vscode
+.pytest_cache
+
+# Python
+env_lexpage*
+venv*
+.mypy_cache
+
+# Gunicorn
+gunicorn.pid
+
+# Static files
+app/static_pub/*
+vendor/
